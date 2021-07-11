@@ -23,26 +23,38 @@
  * @param {ListNode} l2
  * @return {ListNode}
  */
- const addTwoNumbers = function(l1, l2) {
-    const result = new ListNode()
-    let p = l1, q = l2, node = result, carry = 0
-    while (p || q || carry) {
-      const sum = (p ? p.val : 0) + (q ? q.val : 0) + carry
-      node.next = new ListNode(sum % 10)
-      carry = Math.trunc(sum / 10)
-      node = node.next
-      if (p) p = p.next
-      if (q) q = q.next
+ 
+var addTwoNumbers = function(l1, l2) {
+    if(l1 === null)
+      return (l2 === null) ? new ListNode(0) : l2;
+    else if(l2 === null)
+      return l1;  
+    
+    var elem = l1.val + l2.val;
+    var number = new ListNode(elem % 10);
+    var carry = (elem >= 10) ? 1 : 0;
+    l1 = l1.next;
+    l2 = l2.next;
+    
+    const head = number;
+    while(l1 !== null || l2 !== null) {
+      var elem = carry;
+      if(l1 !== null) {
+        elem += l1.val;
+        l1 = l1.next;
+      }
+      if(l2 !== null) {
+        elem += l2.val;
+        l2 = l2.next;
+      }
+      
+      number.next = new ListNode((elem % 10));
+      number = number.next;
+      carry = (elem >= 10) ? 1 : 0;
     }
-    return result.next
-  }
+    if(carry === 1)
+      number.next = new ListNode(1);
+    return head;
+  };
   
-  const ListNode = require('../structs/ListNode')
-  ;[
-    [[9, 9], [1]],                // [0, 0, 1]
-    [[2, 4, 3], [5, 6, 4]],       // [7, 0, 8]
-  ].forEach(([A, B]) => {
-    const l1 = ListNode.from(A),
-          l2 = ListNode.from(B)
-    console.log((addTwoNumbers(l1, l2) || '').toString())
-  })
+  module.exports.addTwoNumbers = addTwoNumbers;
